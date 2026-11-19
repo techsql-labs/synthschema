@@ -1,0 +1,52 @@
+name: Release
+
+# Publishes to PyPI when a GitHub release is published, using PyPI Trusted Publishing
+# (no API token stored in GitHub). One-time setup on pypi.org:
+#   Project synthschema -> Settings -> Publishing -> Add a GitHub publisher
+#   owner: techsql-labs, repository: synthschema, workflow: release.yml, environment: pypi
+# then set the repository variable PYPI_TRUSTED_PUBLISHING=true to enable the publish job.
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Test
+        run: |
+          pip install -e ".[dev]"
+          pytest
+      - name: Build
+        run: |
+          pip install build twine
+          python -m build
+          twine check dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    if: vars.PYPI_TRUSTED_PUBLISHING == 'true'
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true

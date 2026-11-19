@@ -1,0 +1,35 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+*.pypirc
+.pypirc
+
+# Local reference documents — never commit
+*.pdf
+internal/
+# Internal planning docs: kept local, not published.
+CLAUDE.md
+docs/PROJECT_HISTORY.md
+docs/DECISIONS.md
+docs/OPEN_SOURCE_STACK.md
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store

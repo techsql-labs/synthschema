@@ -1,0 +1,89 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "synthschema"
+dynamic = ["version"]
+description = "Open-source, schema-driven synthetic data generation for tabular and relational data."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [{ name = "TechSQL Consulting Services" }]
+keywords = [
+    "synthetic data",
+    "data generation",
+    "gaussian copula",
+    "privacy",
+    "test data",
+    "relational data",
+    "data engineering",
+    "machine learning",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Database",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Testing",
+    "Typing :: Typed",
+]
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scipy>=1.10",
+]
+
+[project.optional-dependencies]
+pii = ["faker>=18"]
+yaml = ["pyyaml>=6"]
+all = ["faker>=18", "pyyaml>=6"]
+dev = ["pytest>=7", "ruff>=0.5", "faker>=18", "pyyaml>=6"]
+
+[project.urls]
+Homepage = "https://github.com/techsql-labs/synthschema"
+Repository = "https://github.com/techsql-labs/synthschema"
+Issues = "https://github.com/techsql-labs/synthschema/issues"
+Changelog = "https://github.com/techsql-labs/synthschema/blob/main/CHANGELOG.md"
+
+[project.scripts]
+synthschema = "synthschema.cli:main"
+
+[tool.hatch.version]
+path = "src/synthschema/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/synthschema"]
+
+[tool.hatch.build.targets.sdist]
+# Explicit allow-list: nothing outside these paths can reach PyPI.
+only-include = [
+    "src/synthschema",
+    "tests",
+    "examples",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "pyproject.toml",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501"]
